@@ -1,0 +1,16 @@
+{
+    "obs": {
+        "host": "localhost",
+        "port": 4455,
+        "password": "I6IDucVcceI4mIC9"
+    },
+    "display": {
+        "source_name": "Clock",
+        "format": "%H:%M:%S",
+        "date_format": "%Y-%m-%d",
+        "update_interval": 1.0,
+        "font": "Arial",
+        "font_size": 48,
+        "show_date": false
+    }
+} 
