@@ -1,5 +1,7 @@
 import os
 import sys
+import sqlite3
+from sqlalchemy import inspect
 
 # プロジェクトルートをPythonパスに追加
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -25,6 +27,60 @@ def inspect_track_details(track):
             except Exception as e:
                 details.append(f"{attr}: [Error: {e}]")
     return details
+
+def inspect_database_structure(client):
+    """データベースの構造を調査"""
+    results = []
+    results.append("\n=== データベーステーブル一覧 ===")
+    
+    try:
+        # SQLAlchemyのインスペクターを使用
+        inspector = inspect(client.db._connection.engine)
+        
+        # テーブル一覧を取得
+        tables = inspector.get_table_names()
+        
+        for table_name in tables:
+            results.append(f"\nテーブル: {table_name}")
+            
+            # テーブルの構造を取得
+            columns = inspector.get_columns(table_name)
+            results.append(f"{table_name}テーブルの構造:")
+            for column in columns:
+                col_name = column['name']
+                col_type = str(column['type'])
+                is_nullable = "NULL" if column.get('nullable', True) else "NOT NULL"
+                is_pk = "PRIMARY KEY" if column.get('primary_key', False) else ""
+                results.append(f"  - {col_name} ({col_type}) {is_nullable} {is_pk}".strip())
+            
+            # インデックス情報を取得
+            indexes = inspector.get_indexes(table_name)
+            if indexes:
+                results.append("\nインデックス:")
+                for index in indexes:
+                    results.append(f"  - {index['name']}: {', '.join(index['column_names'])}")
+            
+            # 外部キー情報を取得
+            foreign_keys = inspector.get_foreign_keys(table_name)
+            if foreign_keys:
+                results.append("\n外部キー:")
+                for fk in foreign_keys:
+                    results.append(f"  - {fk['constrained_columns']} -> {fk['referred_table']}.{fk['referred_columns']}")
+            
+            # レコード数を取得
+            try:
+                count = client.db._connection.execute(f"SELECT COUNT(*) FROM {table_name}").scalar()
+                results.append(f"\nレコード数: {count}")
+            except Exception as e:
+                results.append(f"レコード数の取得に失敗: {e}")
+            
+            results.append("")
+            
+    except Exception as e:
+        results.append(f"テーブル情報の取得に失敗: {e}")
+        logger.exception("データベース構造の取得中にエラー:")
+    
+    return results
 
 def test_database_inspection():
     """Rekordboxデータベースの詳細な調査を行う"""
@@ -67,27 +123,8 @@ def test_database_inspection():
                 details = inspect_track_details(track)
                 results.extend(details)
 
-        # データベースのテーブル構造を確認
-        try:
-            if hasattr(client.db, '_connection'):
-                cursor = client.db._connection.cursor()
-                
-                # テーブル一覧を取得
-                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
-                tables = cursor.fetchall()
-                results.append("\n=== データベーステーブル一覧 ===")
-                for table in tables:
-                    results.append(f"テーブル: {table[0]}")
-                    # 各テーブルの構造を取得
-                    cursor.execute(f"PRAGMA table_info({table[0]})")
-                    columns = cursor.fetchall()
-                    results.append(f"\n{table[0]}テーブルの構造:")
-                    for col in columns:
-                        results.append(f"  - {col[1]} ({col[2]})")
-                    results.append("")  # 空行を追加
-
-        except Exception as e:
-            results.append(f"テーブル情報の取得に失敗: {e}")
+        # データベース構造の調査
+        results.extend(inspect_database_structure(client))
 
     except Exception as e:
         results.append(f"データ取得中にエラーが発生: {e}")
