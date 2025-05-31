@@ -5,7 +5,7 @@ from pyrekordbox.db6 import Rekordbox6Database
 
 # ロギングの設定
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
@@ -36,15 +36,19 @@ def main():
             print(f"Artist: {current_track['artist']}")
             print(f"BPM: {current_track['bpm']}")
             print(f"Key: {current_track['key']}")
+            if current_track['last_played']:
+                print(f"Last played: {current_track['last_played']}")
         else:
             print("\nNo track is currently playing")
 
-        # 最近再生した曲の履歴を取得
-        print("\nRecent history:")
-        history = client.get_history(limit=5)
+        # 最近再生した曲の履歴を取得（直近1週間）
+        print("\nRecent history (last 7 days):")
+        history = client.get_history(limit=10, days=7)
         for i, track in enumerate(history, 1):
             print(f"\n{i}. {track['title']} - {track['artist']}")
             print(f"   BPM: {track['bpm']}, Key: {track['key']}")
+            if track['last_played']:
+                print(f"   Last played: {track['last_played']}")
 
     except Exception as e:
         print(f"Error during test: {e}")
