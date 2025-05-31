@@ -1,0 +1,23 @@
+{
+    "obs": {
+        "host": "localhost",
+        "port": 4455,
+        "password": ""
+    },
+    "rekordbox": {
+        "database_path": "",
+        "database_password": ""
+    },
+    "display": {
+        "source_name": "NowPlaying",
+        "update_interval": 1.0,
+        "font": "Arial",
+        "font_size": 24
+    },
+    "format": {
+        "track_info": "{title} - {artist}",
+        "extended_info": "{title} - {artist} ({album})",
+        "show_extended_info": false,
+        "show_artwork": false
+    }
+} 
