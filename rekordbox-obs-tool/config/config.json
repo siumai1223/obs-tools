@@ -5,7 +5,7 @@
         "password": ""
     },
     "rekordbox": {
-        "database_path": "",
+        "database_path": "C:\\Users\\takam\\AppData\\Roaming\\Pioneer\\rekordbox\\master.db",
         "database_password": ""
     },
     "display": {
