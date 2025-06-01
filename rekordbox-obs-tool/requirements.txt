@@ -3,7 +3,7 @@ obs-websocket-py==1.0.0
 sqlite-utils==3.36
 python-dateutil==2.8.2
 pytz==2024.1
-pyrekordbox==0.4.3
+pyrekordbox==1.0.0
 
 # Test dependencies
 pytest==8.0.0

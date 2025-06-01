@@ -1,0 +1,21 @@
+# Configuration files with sensitive information
+config/config.json
+obs_client/tests/test_config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.venv/
+venv/
+ENV/ 
