@@ -34,4 +34,8 @@ config.local.json
 # Testing
 .coverage
 htmlcov/
-.pytest_cache/ 
+.pytest_cache/
+
+# Debug files
+database_inspection_results.txt
+debug_results.txt 
