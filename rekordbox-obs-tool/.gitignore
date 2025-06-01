@@ -18,4 +18,16 @@ htmlcov/
 .env
 .venv/
 venv/
-ENV/ 
+ENV/
+
+# Logs
+*.log
+
+# Reference project config
+obs-clock-tool/config.json
+
+# Ignore config files
+config.json
+test_config.json
+**/config.json
+**/test_config.json 
