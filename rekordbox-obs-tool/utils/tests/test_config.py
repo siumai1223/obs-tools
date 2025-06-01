@@ -10,7 +10,7 @@ def temp_config_file(tmp_path):
         "obs": {
             "host": "localhost",
             "port": 4444,
-            "password": "secret"
+            "password": os.getenv("TEST_OBS_PASSWORD", "")  # 環境変数から取得
         },
         "display": {
             "font_size": 12,

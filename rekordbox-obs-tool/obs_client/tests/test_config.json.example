@@ -1,0 +1,8 @@
+{
+    "obs": {
+        "host": "localhost",
+        "port": 4455,
+        "password": "",
+        "source_name": "NowPlaying"
+    }
+} 

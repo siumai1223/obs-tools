@@ -1,0 +1,33 @@
+# Configuration files with sensitive information
+config/config.json
+obs_client/tests/test_config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.venv/
+venv/
+ENV/
+
+# Logs
+*.log
+
+# Reference project config
+obs-clock-tool/config.json
+
+# Ignore config files
+config.json
+test_config.json
+**/config.json
+**/test_config.json 
