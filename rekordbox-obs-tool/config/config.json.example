@@ -1,0 +1,24 @@
+{
+    "obs": {
+        "host": "localhost",
+        "port": 4455,
+        "password": "",
+        "source_name": "NowPlaying"
+    },
+    "rekordbox": {
+        "database_path": "C:\\Users\\[USERNAME]\\AppData\\Roaming\\Pioneer\\rekordbox\\master.db",
+        "database_password": ""
+    },
+    "display": {
+        "format": "{title} - {artist}",
+        "extended_format": "{title} - {artist} ({bpm} BPM, Key: {key})",
+        "show_extended_info": false,
+        "update_interval": 1.0
+    },
+    "format": {
+        "track_info": "{title} - {artist}",
+        "extended_info": "{title} - {artist} ({album})",
+        "show_extended_info": false,
+        "show_artwork": false
+    }
+} 
