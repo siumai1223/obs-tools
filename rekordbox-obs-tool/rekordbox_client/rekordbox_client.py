@@ -10,6 +10,8 @@ class RekordboxClient:
         self.db = None
         self.key = key
         self.logger = logging.getLogger(__name__)
+        self._last_played_track = None
+        self._last_check_time = None
 
     def connect(self) -> bool:
         """rekordboxデータベースに接続する"""
@@ -28,13 +30,38 @@ class RekordboxClient:
                 if not self.connect():
                     return None
 
-            # 現在再生中の曲を取得
+            # データベースから最新の再生情報を取得
             content = self.db.get_content()
             if not content:
                 return None
 
-            # 最初の曲を返す（現在再生中の曲の情報は取得できないため）
-            return self._format_track_info(content[0])
+            # 最新の更新時刻を持つ曲を探す
+            current_time = datetime.now()
+            recent_tracks = []
+            
+            for track in content:
+                if hasattr(track, 'updated_at') and track.updated_at:
+                    recent_tracks.append((track, track.updated_at))
+
+            if recent_tracks:
+                # 最新の更新時刻を持つ曲を選択
+                recent_tracks.sort(key=lambda x: x[1], reverse=True)
+                track = recent_tracks[0][0]
+                
+                # 前回と異なる曲の場合、ログに記録
+                if (self._last_played_track is None or 
+                    track.Title != self._last_played_track.get('title')):
+                    self.logger.info(f"New track detected: {track.Title} (Last updated: {track.updated_at})")
+                    self._last_played_track = self._format_track_info(track)
+                    self._last_check_time = current_time
+                
+                return self._last_played_track
+            else:
+                # 更新時刻を持つ曲が見つからない場合
+                self._last_played_track = None
+                self._last_check_time = None
+                return None
+
         except Exception as e:
             self.logger.error(f"Error getting current track: {e}")
             return None
