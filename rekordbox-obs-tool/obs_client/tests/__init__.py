@@ -1,0 +1,3 @@
+"""
+OBS client tests package
+""" 

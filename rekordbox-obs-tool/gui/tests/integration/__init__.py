@@ -1,0 +1,3 @@
+"""
+GUI integration tests package
+""" 
